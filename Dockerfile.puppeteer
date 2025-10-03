@@ -1,0 +1,45 @@
+# Use uma imagem base Alpine
+FROM node:16-alpine
+
+# Defina o usuário como root para instalar dependências
+USER root
+
+# Instale as dependências necessárias para Chromium e Puppeteer
+RUN apk update && apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    bash \
+    wget \
+    udev \
+    alsa-lib \
+    cups-libs \
+    libxcomposite \
+    libxrandr \
+    ttf-liberation \
+    xvfb
+
+# Configure variáveis de ambiente para Puppeteer
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Troque para o usuário padrão da imagem base
+USER node
+
+# Defina o diretório de trabalho
+WORKDIR /app
+
+# Copie os arquivos do projeto (se existirem)
+COPY package*.json ./
+
+# Instale as dependências do projeto (se package.json existir)
+RUN if [ -f package.json ]; then npm install; fi
+
+# Copie o restante dos arquivos
+COPY . .
+
+# Comando padrão para iniciar o aplicativo
+CMD ["node", "index.js"]
