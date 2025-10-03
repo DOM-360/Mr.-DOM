@@ -14,7 +14,7 @@ openai==1.51.2
 python-multipart==0.0.20
 
 # Logging e monitoramento
-structlog==23.2.0
+structlog==25.4.0
 prometheus-fastapi-instrumentator==7.1.0  # Métricas Prometheus
 
 # Validação e serialização
